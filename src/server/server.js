@@ -34,15 +34,16 @@ const InputError = require('../exception/InputError');
             return newResponse
         }
 
-        if (response.isBoom){
-            if(response.output.statusCode === 413){
+        if (response.output.statusCode === 413){
                 const newResponse = h.response({
                     status: "fail",
                     message : "Payload content length greater than maximum allowed: 1000000"
                 });
                 newResponse.code(413)
                 return newResponse
-            }
+        }
+
+        if(response.output.statusCode === 400){
             const newResponse = h.response({
                 status: "fail",
                 message : "Terjadi kesalahan dalam melakukan prediksi"
@@ -51,7 +52,6 @@ const InputError = require('../exception/InputError');
 
             return newResponse
         }
-        console.log("tes");
         return h.continue;
     });
  
