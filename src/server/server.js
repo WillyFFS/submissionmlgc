@@ -27,21 +27,24 @@ const InputError = require('../exceptions/InputError');
         if (response instanceof InputError){
             const newResponse = h.response({
                 status: "fail",
-                message : "Payload content length greater than maximum allowed: 1000000"
-            });
-            newResponse.code({
-                statusCode: 413
-            })
-            return newResponse
-        }
-
-        if (response instanceof isBoom){
-            const newResponse = h.response({
-                status: "fail",
                 message : "Terjadi kesalahan dalam melakukan prediksi"
             });
             newResponse.code({
                 statusCode: 400
+            })
+            
+            return newResponse
+        }
+
+        if (response instanceof isBoom){
+            if(request.payload.length > 1000000){
+                const newResponse = h.response({
+                    status: "fail",
+                    message : "Payload content length greater than maximum allowed: 1000000"
+                });
+            }
+            newResponse.code({
+                statusCode: 413
             })
             return newResponse
         }
