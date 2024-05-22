@@ -8,18 +8,18 @@ async function postPredictHandler(request, h) {
   const { model } = request.server.app;
  
   const {label, suggestion } = await predictClassification(model, image);
+
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
- 
+
   const data = {
     "id": id,
     "result": label,
     "suggestion": suggestion,
     "createdAt": createdAt
   }
-
   await storeData(id, data);
-  
+
   const response = h.response({
     status: 'success',
     message: "Model is predicted successfully",

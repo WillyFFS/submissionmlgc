@@ -8,7 +8,7 @@ const InputError = require('../exception/InputError');
 (async () => {
     const server = Hapi.server({
         port: 3000,
-        host: '0.0.0.0',
+        host: 'localhost',
         routes: {
             cors: {
               origin: ['*'],
@@ -29,26 +29,29 @@ const InputError = require('../exception/InputError');
                 status: "fail",
                 message : "Terjadi kesalahan dalam melakukan prediksi"
             });
-            newResponse.code({
-                statusCode: 400
-            })
+            newResponse.code(400)
             
             return newResponse
         }
 
-        if (response instanceof isBoom){
-            if(request.payload.length > 1000000){
+        if (response.isBoom){
+            if(response.output.statusCode === 413){
                 const newResponse = h.response({
                     status: "fail",
                     message : "Payload content length greater than maximum allowed: 1000000"
                 });
+                newResponse.code(413)
+                return newResponse
             }
-            newResponse.code({
-                statusCode: 413
-            })
+            const newResponse = h.response({
+                status: "fail",
+                message : "Terjadi kesalahan dalam melakukan prediksi"
+            });
+            newResponse.code(400)
+
             return newResponse
         }
- 
+        console.log("tes");
         return h.continue;
     });
  
