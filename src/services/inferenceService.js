@@ -4,18 +4,20 @@ const InputError = require('../exceptions/InputError');
  
 async function predictClassification(model, image) {
     try{
-        const buffer = Buffer.from(image); 
-        const tensor = tf.node.decodeImage(buffer);
-        const resizedTensor = tf.image.resizeNearestNeighbor(tensor, [224, 224]);
-        const expandedTensor = resizedTensor.expandDims();
-        const floatTensor = expandedTensor.toFloat();
-
-        const prediction = model.predict(floatTensor); 
-        const score = await prediction.data();
-        const confidenceScore = Math.max(...score) * 100;
-
-        let  suggestion;
-        const label = confidenceScore > 50 ? 'Cancer': 'Non-cancer';
+        const tensor = tf.node
+            .decodeJpeg(image)
+            .resizeNearestNeighbor([224, 224])
+            .expandDims()
+            .toFloat()
+ 
+        const classes = ['Cancer', 'Non-Cancer'];
+ 
+        const prediction = model.predict(tensor);
+ 
+        const classResult = tf.argMax(prediction, 1).dataSync()[0];
+        const label = classes[classResult];
+ 
+        let suggestion;
     
         if(label ===  'Cancer') {
             suggestion="Segera periksa ke dokter!"

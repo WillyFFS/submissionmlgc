@@ -2,3 +2,5 @@
 .env
 package-lock.json
 /model
+google-cloud-cli-477.0.0-linux-x86_64.tar.gz
+/google-cloud-sdk
