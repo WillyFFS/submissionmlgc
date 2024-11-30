@@ -1,0 +1,6 @@
+{  
+ "backend-service-url": "http://34.101.70.235:3000/predict",
+ "frontend-service-url": "http://submissionmlgc-willy.et.r.appspot.com/",
+ "project-id": "submissionmlgc-willy",
+ "bucket-name": "submissionmlgc-willy"
+}
